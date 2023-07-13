@@ -1,5 +1,7 @@
 # pushserver
 
+[![Docker Repository on Quay](https://quay.io/repository/speed5719/pushserver/status "Docker Repository on Quay")](https://quay.io/repository/speed5719/pushserver)
+
 Simple server that receives PUT requests and writes them to InfluxDB.
 
 ## Request
