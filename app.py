@@ -13,22 +13,20 @@ influx_bucket = os.getenv('INFLUXDB_BUCKET')
 def hello():
     return 'Hello, World!'
 
-@app.route('/record', methods = ['PUT'])
+@app.route('/sensor', methods = ['PUT'])
 def record():
     if not request.json:
         abort(400)
     
+    location = request.json.get('location', None)
     temperature = request.json.get('temperature', None)
     humidity = request.json.get('humidity', None)
-    location = request.json.get('location', None)
 
     client = InfluxDBClient(url=influx_url, token=influx_token, org=influx_org)
     write_api = client.write_api(write_options=SYNCHRONOUS)
     
-    if (location is None):
-        return
-    elif (humidity is None and location is None):
-        return
+    if (location is None) or (temperature is None and humidity is None):
+        abort(422)
     
     p = Point('sensor').tag('location', location)
 
@@ -38,9 +36,6 @@ def record():
         p.field('humidity', float(humidity))
     
     write_api.write(bucket=influx_bucket, record=p)
-
-    print(temperature)
-    print(location)
 
     write_api.close()
     client.close()

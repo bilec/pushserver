@@ -7,13 +7,21 @@ Simple server that receives PUT requests and writes them to InfluxDB.
 ## Request
 ```http
 ### Expect code 204
-POST http://localhost:5000/record
+POST http://localhost:5000/sensor
    Content-Type: application/json
 
    {
      "location": "bedroom",
      "temperature": "20.5",
      "humidity": "54.2"
+   }
+
+### Expect code 422
+   POST http://localhost:5000/sensor
+   Content-Type: application/json
+
+   { 
+     temperature: "20.5"
    }
 ```
 
